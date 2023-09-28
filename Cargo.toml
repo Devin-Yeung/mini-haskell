@@ -10,6 +10,7 @@ members = ["crates/*"]
 
 [workspace.dependencies]
 mini_haskell_lexer = { version = "0.1.0", path = "crates/mini_haskell_lexer" }
+mini_haskell_diagnostic = { version = "0.1.0", path = "crates/mini_haskell_diagnostic" }
 testsuite = { version = "0.1.0", path = "crates/testsuite" }
 testsuite_macros = { version = "0.1.0", path = "crates/testsuite_macros" }
 insta = { version = "1.33.0", features = ["glob"] }
