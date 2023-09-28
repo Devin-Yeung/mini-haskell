@@ -4,59 +4,155 @@ expression: tokens
 ---
 [
     Ok(
-        BoolDecl,
+        Token {
+            ty: BoolDecl,
+            span: Span {
+                start: 0,
+                end: 4,
+            },
+        },
     ),
     Ok(
-        BoolLit(
-            false,
-        ),
+        Token {
+            ty: BoolLit(
+                false,
+            ),
+            span: Span {
+                start: 5,
+                end: 6,
+            },
+        },
     ),
     Ok(
-        BoolLit(
-            true,
-        ),
+        Token {
+            ty: BoolLit(
+                true,
+            ),
+            span: Span {
+                start: 7,
+                end: 8,
+            },
+        },
     ),
     Ok(
-        Nat,
+        Token {
+            ty: Nat,
+            span: Span {
+                start: 9,
+                end: 12,
+            },
+        },
     ),
     Ok(
-        Func,
+        Token {
+            ty: Func,
+            span: Span {
+                start: 13,
+                end: 17,
+            },
+        },
     ),
     Ok(
-        QuestionMark,
+        Token {
+            ty: QuestionMark,
+            span: Span {
+                start: 18,
+                end: 19,
+            },
+        },
     ),
     Ok(
-        Colon,
+        Token {
+            ty: Colon,
+            span: Span {
+                start: 20,
+                end: 21,
+            },
+        },
     ),
     Ok(
-        Semicolon,
+        Token {
+            ty: Semicolon,
+            span: Span {
+                start: 22,
+                end: 23,
+            },
+        },
     ),
     Ok(
-        LeftParen,
+        Token {
+            ty: LeftParen,
+            span: Span {
+                start: 24,
+                end: 25,
+            },
+        },
     ),
     Ok(
-        RightParen,
+        Token {
+            ty: RightParen,
+            span: Span {
+                start: 25,
+                end: 26,
+            },
+        },
     ),
     Ok(
-        Plus,
+        Token {
+            ty: Plus,
+            span: Span {
+                start: 27,
+                end: 28,
+            },
+        },
     ),
     Ok(
-        Ampersand,
+        Token {
+            ty: Ampersand,
+            span: Span {
+                start: 29,
+                end: 30,
+            },
+        },
     ),
     Ok(
-        Arrow,
+        Token {
+            ty: Arrow,
+            span: Span {
+                start: 31,
+                end: 33,
+            },
+        },
     ),
     Ok(
-        Less,
+        Token {
+            ty: Less,
+            span: Span {
+                start: 34,
+                end: 35,
+            },
+        },
     ),
     Ok(
-        Comment(
-            "[abc]",
-        ),
+        Token {
+            ty: Comment(
+                "[abc]",
+            ),
+            span: Span {
+                start: 36,
+                end: 41,
+            },
+        },
     ),
     Ok(
-        Identifier(
-            "a123",
-        ),
+        Token {
+            ty: Identifier(
+                "a123",
+            ),
+            span: Span {
+                start: 42,
+                end: 46,
+            },
+        },
     ),
 ]

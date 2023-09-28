@@ -1,0 +1,14 @@
+---
+source: crates/mini_haskell_lexer/src/lexer.rs
+expression: tokens
+---
+[
+    Err(
+        UnexpectedToken(
+            Span {
+                start: 0,
+                end: 1,
+            },
+        ),
+    ),
+]

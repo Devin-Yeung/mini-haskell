@@ -68,15 +68,6 @@ impl Token {
     }
 }
 
-impl From<(TokenTy, logos::Span)> for Token {
-    fn from(value: (TokenTy, logos::Span)) -> Self {
-        Token {
-            ty: value.0,
-            span: value.1.into(),
-        }
-    }
-}
-
 impl Token {
     pub fn tokens<S: AsRef<str>>(source: &S) -> Vec<Result<Token, LexingError>> {
         let lexer = TokenTy::lexer(source.as_ref());
@@ -93,13 +84,16 @@ impl Token {
 
 #[cfg(test)]
 mod tests {
-    use crate::lexer::TokenTy;
-    use logos::Logos;
+    use crate::lexer::Token;
     use testsuite::unittest;
 
     unittest!(all_tokens, |src| {
-        let mut lex = TokenTy::lexer(src);
-        let tokens = lex.collect::<Vec<_>>();
+        let tokens = Token::tokens(&src);
+        insta::assert_debug_snapshot!(tokens);
+    });
+
+    unittest!(invalid_token, |src| {
+        let tokens = Token::tokens(&src);
         insta::assert_debug_snapshot!(tokens);
     });
 }
