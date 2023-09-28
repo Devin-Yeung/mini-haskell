@@ -1,8 +1,10 @@
-use logos::Logos;
+use crate::error::LexingError;
+use crate::span::Span;
+use logos::{Logos, Source};
 
 #[derive(Logos, Debug, PartialEq)]
 #[logos(skip r"[ \t\n\f]+")] // Ignore this regex pattern between tokens
-enum TokenTy {
+pub enum TokenTy {
     // The variable type Boolean, to declare a Boolean variable.
     #[token("bool")]
     BoolDecl,
@@ -52,6 +54,41 @@ enum TokenTy {
 
     #[regex(r"[a-zA-z][a-zA-Z0-9_]*", | lex | lex.slice().to_owned())]
     Identifier(String),
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Token {
+    pub ty: TokenTy,
+    pub span: Span,
+}
+
+impl Token {
+    pub fn new(ty: TokenTy, span: Span) -> Self {
+        Token { ty, span }
+    }
+}
+
+impl From<(TokenTy, logos::Span)> for Token {
+    fn from(value: (TokenTy, logos::Span)) -> Self {
+        Token {
+            ty: value.0,
+            span: value.1.into(),
+        }
+    }
+}
+
+impl Token {
+    pub fn tokens<S: AsRef<str>>(source: &S) -> Vec<Result<Token, LexingError>> {
+        let lexer = TokenTy::lexer(source.as_ref());
+        lexer
+            .spanned()
+            .into_iter()
+            .map(|(token, span)| match token {
+                Ok(ty) => Ok(Token::new(ty, span.into())),
+                Err(_) => Err(LexingError::UnexpectedToken(span.into())),
+            })
+            .collect::<Vec<_>>()
+    }
 }
 
 #[cfg(test)]

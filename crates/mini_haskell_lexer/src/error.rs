@@ -1,4 +1,4 @@
-use logos::Span;
+use crate::span::Span;
 use thiserror::Error;
 
 #[derive(Error, Debug, PartialEq, Clone)]
