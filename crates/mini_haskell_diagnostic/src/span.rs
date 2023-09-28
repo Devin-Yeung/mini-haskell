@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq, Clone)]
 pub struct Span {
-    start: usize,
-    end: usize,
+    pub start: usize,
+    pub end: usize,
 }
 
 impl From<logos::Span> for Span {
