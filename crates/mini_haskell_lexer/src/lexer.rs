@@ -51,7 +51,7 @@ enum Token {
     Comment(String),
 
     #[regex(r"[a-zA-z][a-zA-Z0-9_]*", |lex| lex.slice().to_owned())]
-    Identifier(String)
+    Identifier(String),
 }
 
 #[cfg(test)]
