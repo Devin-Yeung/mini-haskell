@@ -1,6 +1,6 @@
 use crate::error::LexingError;
-use crate::span::Span;
 use logos::{Logos, Source};
+use mini_haskell_diagnostic::span::Span;
 
 #[derive(Logos, Debug, PartialEq)]
 #[logos(skip r"[ \t\n\f]+")] // Ignore this regex pattern between tokens

@@ -1,4 +1,4 @@
-use crate::span::Span;
+use mini_haskell_diagnostic::span::Span;
 use thiserror::Error;
 
 #[derive(Error, Debug, PartialEq, Clone)]
