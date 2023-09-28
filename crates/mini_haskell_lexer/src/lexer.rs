@@ -2,7 +2,7 @@ use logos::Logos;
 
 #[derive(Logos, Debug, PartialEq)]
 #[logos(skip r"[ \t\n\f]+")] // Ignore this regex pattern between tokens
-enum Token {
+enum TokenTy {
     // The variable type Boolean, to declare a Boolean variable.
     #[token("bool")]
     BoolDecl,
@@ -56,12 +56,12 @@ enum Token {
 
 #[cfg(test)]
 mod tests {
-    use crate::lexer::Token;
+    use crate::lexer::TokenTy;
     use logos::Logos;
     use testsuite::unittest;
 
     unittest!(all_tokens, |src| {
-        let mut lex = Token::lexer(src);
+        let mut lex = TokenTy::lexer(src);
         let tokens = lex.collect::<Vec<_>>();
         insta::assert_debug_snapshot!(tokens);
     });
