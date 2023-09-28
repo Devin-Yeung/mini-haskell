@@ -40,12 +40,18 @@ enum Token {
     #[token("&")]
     Ampersand,
 
+    #[token("->")]
+    Arrow,
+
     #[token("<")]
     Less,
 
     #[regex(r"\[[^\]]*\]", |lex| lex.slice().to_owned())]
     // see https://github.com/maciejhirsz/logos/issues/246
     Comment(String),
+
+    #[regex(r"[a-zA-z][a-zA-Z0-9_]*", |lex| lex.slice().to_owned())]
+    Identifier(String)
 }
 
 #[cfg(test)]

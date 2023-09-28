@@ -44,11 +44,19 @@ expression: tokens
         Ampersand,
     ),
     Ok(
+        Arrow,
+    ),
+    Ok(
         Less,
     ),
     Ok(
         Comment(
             "[abc]",
+        ),
+    ),
+    Ok(
+        Identifier(
+            "a123",
         ),
     ),
 ]
