@@ -8,8 +8,8 @@ enum Token {
     BoolDecl,
 
     // Boolean literal
-    #[token("T", |_| false)]
-    #[token("F", |_| true)]
+    #[token("T", | _ | false)]
+    #[token("F", | _ | true)]
     BoolLit(bool),
 
     // The variable type natural number, to declare a natural number.
@@ -46,11 +46,11 @@ enum Token {
     #[token("<")]
     Less,
 
-    #[regex(r"\[[^\]]*\]", |lex| lex.slice().to_owned())]
+    #[regex(r"\[[^\]]*\]", | lex | lex.slice().to_owned())]
     // see https://github.com/maciejhirsz/logos/issues/246
     Comment(String),
 
-    #[regex(r"[a-zA-z][a-zA-Z0-9_]*", |lex| lex.slice().to_owned())]
+    #[regex(r"[a-zA-z][a-zA-Z0-9_]*", | lex | lex.slice().to_owned())]
     Identifier(String),
 }
 
