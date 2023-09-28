@@ -1,0 +1,54 @@
+---
+source: crates/mini_haskell_lexer/src/lexer.rs
+expression: tokens
+---
+[
+    Ok(
+        BoolDecl,
+    ),
+    Ok(
+        BoolLit(
+            false,
+        ),
+    ),
+    Ok(
+        BoolLit(
+            true,
+        ),
+    ),
+    Ok(
+        Nat,
+    ),
+    Ok(
+        Func,
+    ),
+    Ok(
+        QuestionMark,
+    ),
+    Ok(
+        Colon,
+    ),
+    Ok(
+        Semicolon,
+    ),
+    Ok(
+        LeftParen,
+    ),
+    Ok(
+        RightParen,
+    ),
+    Ok(
+        Plus,
+    ),
+    Ok(
+        Ampersand,
+    ),
+    Ok(
+        Less,
+    ),
+    Ok(
+        Comment(
+            "[abc]",
+        ),
+    ),
+]
