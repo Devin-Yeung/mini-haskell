@@ -1,14 +1,12 @@
 [package]
-name = "mini_haskell_lexer"
+name = "mini_haskell_diagnostic"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+ariadne = "0.3.0"
 logos = "0.13.0"
 insta = { workspace = true, features = ["glob"] }
-thiserror = { workspace = true }
-mini_haskell_diagnostic = { workspace = true }
 testsuite = { workspace = true }
-testsuite_macros = { workspace = true }

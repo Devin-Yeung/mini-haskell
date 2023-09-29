@@ -1,0 +1,12 @@
+---
+source: crates/mini_haskell_diagnostic/src/tester.rs
+expression: diagnostics
+---
+Error: This is an example error
+   ╭─[<unknown>:1:1]
+   │
+ 1 │ Hello World!
+   │      ┬  
+   │      ╰── This is a hint
+───╯
+

@@ -1,6 +1,6 @@
 use crate::error::LexingError;
-use crate::span::Span;
 use logos::{Logos, Source};
+use mini_haskell_diagnostic::span::Span;
 
 #[derive(Logos, Debug, PartialEq)]
 #[logos(skip r"[ \t\n\f]+")] // Ignore this regex pattern between tokens
@@ -73,7 +73,6 @@ impl Token {
         let lexer = TokenTy::lexer(source.as_ref());
         lexer
             .spanned()
-            .into_iter()
             .map(|(token, span)| match token {
                 Ok(ty) => Ok(Token::new(ty, span.into())),
                 Err(_) => Err(LexingError::UnexpectedToken(span.into())),
