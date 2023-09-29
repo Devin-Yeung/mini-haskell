@@ -20,17 +20,20 @@ impl<'a> Reporter<'a> {
             .reports
             .into_iter()
             .map(|report| {
+                dbg!(&report.message);
                 let mut builder: ReportBuilder<Range<usize>> =
                     ariadne::Report::build(ariadne::ReportKind::Error, (), report.offset)
-                        .with_message(report.message)
-                        .with_config(ariadne::Config::default().with_color(self.config.color));
+                        .with_message(report.message);
 
                 for label in report.labels {
-                    builder = builder
-                        .with_label(label.span.into())
-                        .with_message(label.hint);
+                    dbg!(&label.hint);
+                    builder = builder.with_label(
+                        Into::<ariadne::Label>::into(label.span).with_message(label.hint),
+                    );
                 }
-                let report = builder.finish();
+                let report = builder
+                    .with_config(ariadne::Config::default().with_color(self.config.color))
+                    .finish();
 
                 let mut cursor = Cursor::new(Vec::<u8>::new());
                 report
@@ -71,8 +74,16 @@ impl<'a> ReporterBuilder<'a> {
         self.config = Some(config);
         self
     }
+
+    pub fn build(self) -> Reporter<'a> {
+        Reporter {
+            source: self.source.unwrap(),
+            config: self.config.unwrap(),
+            context: self.context.unwrap(),
+        }
+    }
 }
 
 pub struct ReporterConfig {
-    color: bool,
+    pub color: bool,
 }
