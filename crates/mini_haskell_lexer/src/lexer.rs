@@ -1,5 +1,5 @@
 use crate::error::LexingError;
-use logos::{Logos, Source};
+use logos::Logos;
 use mini_haskell_diagnostic::span::Span;
 
 #[derive(Logos, Debug, PartialEq)]
