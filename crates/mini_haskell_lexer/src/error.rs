@@ -1,4 +1,4 @@
-use mini_haskell_diagnostic::diagnostic::Diagnostic;
+use mini_haskell_diagnostic::report::{Report, ReportBuilder};
 use mini_haskell_diagnostic::span::Span;
 use thiserror::Error;
 
@@ -9,14 +9,14 @@ pub enum LexingError {
     UnexpectedToken(Span),
 }
 
-impl Diagnostic for LexingError {
-    fn span(&self) -> Span {
-        match self {
-            LexingError::UnexpectedToken(span) => span.clone(),
+impl Into<Report> for LexingError {
+    fn into(self) -> Report {
+        match &self {
+            LexingError::UnexpectedToken(span) => ReportBuilder::new()
+                .message(self.to_string())
+                .offset(span.start)
+                .label(span.clone(), self.to_string())
+                .finish(),
         }
-    }
-
-    fn message(&self) -> String {
-        self.to_string()
     }
 }
