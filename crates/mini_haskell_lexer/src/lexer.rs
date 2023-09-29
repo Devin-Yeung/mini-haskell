@@ -14,6 +14,10 @@ pub enum TokenTy {
     #[token("F", | _ | true)]
     BoolLit(bool),
 
+    #[regex(r"(?:[1-9][0-9]*|0)", | lex | lex.slice().parse::<usize>().unwrap())]
+    // Nature number literal
+    NatLit(usize),
+
     // The variable type natural number, to declare a natural number.
     #[token("nat")]
     Nat,

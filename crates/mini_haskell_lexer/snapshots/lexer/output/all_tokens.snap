@@ -155,4 +155,37 @@ expression: tokens
             },
         },
     ),
+    Ok(
+        Token {
+            ty: NatLit(
+                0,
+            ),
+            span: Span {
+                start: 47,
+                end: 48,
+            },
+        },
+    ),
+    Ok(
+        Token {
+            ty: NatLit(
+                1,
+            ),
+            span: Span {
+                start: 49,
+                end: 50,
+            },
+        },
+    ),
+    Ok(
+        Token {
+            ty: NatLit(
+                123,
+            ),
+            span: Span {
+                start: 51,
+                end: 54,
+            },
+        },
+    ),
 ]
