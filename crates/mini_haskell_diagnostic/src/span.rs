@@ -15,8 +15,8 @@ impl From<logos::Span> for Span {
     }
 }
 
-impl Into<ariadne::Label> for Span {
-    fn into(self) -> Label {
-        Label::new(self.start..self.end)
+impl From<Span> for ariadne::Label {
+    fn from(val: Span) -> Self {
+        Label::new(val.start..val.end)
     }
 }

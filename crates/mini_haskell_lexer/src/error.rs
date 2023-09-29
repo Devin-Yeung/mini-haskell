@@ -9,13 +9,13 @@ pub enum LexingError {
     UnexpectedToken(Span),
 }
 
-impl Into<Report> for LexingError {
-    fn into(self) -> Report {
-        match &self {
+impl From<LexingError> for Report {
+    fn from(val: LexingError) -> Self {
+        match &val {
             LexingError::UnexpectedToken(span) => ReportBuilder::new()
-                .message(self.to_string())
+                .message(val.to_string())
                 .offset(span.start)
-                .label(span.clone(), self.to_string())
+                .label(span.clone(), val.to_string())
                 .finish(),
         }
     }

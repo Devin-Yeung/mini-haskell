@@ -73,7 +73,6 @@ impl Token {
         let lexer = TokenTy::lexer(source.as_ref());
         lexer
             .spanned()
-            .into_iter()
             .map(|(token, span)| match token {
                 Ok(ty) => Ok(Token::new(ty, span.into())),
                 Err(_) => Err(LexingError::UnexpectedToken(span.into())),

@@ -1,6 +1,6 @@
 use crate::diagnostic::DiagnosticContext;
 use crate::report::Report;
-use crate::reporter::{Reporter, ReporterBuilder, ReporterConfig};
+use crate::reporter::{ReporterBuilder, ReporterConfig};
 
 pub struct Tester<'a> {
     builder: ReporterBuilder<'a>,

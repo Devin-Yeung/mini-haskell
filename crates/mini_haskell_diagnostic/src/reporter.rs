@@ -1,5 +1,5 @@
 use crate::diagnostic::DiagnosticContext;
-use ariadne::{ReportBuilder, Source};
+use ariadne::ReportBuilder;
 use std::io::Cursor;
 use std::ops::Range;
 
