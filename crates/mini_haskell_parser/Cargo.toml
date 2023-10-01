@@ -1,0 +1,14 @@
+[package]
+name = "mini_haskell_parser"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+mini_haskell_lexer = { workspace = true }
+mini_haskell_diagnostic = { workspace = true }
+testsuite = { workspace = true }
+testsuite_macros = { workspace = true }
+thiserror = { workspace = true }
+insta = { workspace = true }
