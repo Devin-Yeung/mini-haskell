@@ -1,0 +1,29 @@
+---
+source: crates/mini_haskell_parser/src/parser.rs
+expression: result
+---
+[
+    Ok(
+        NatLit(
+            1,
+        ),
+    ),
+    Ok(
+        NatLit(
+            1,
+        ),
+    ),
+    Ok(
+        NatLit(
+            2,
+        ),
+    ),
+    Ok(
+        NatLit(
+            2,
+        ),
+    ),
+    Ok(
+        EOF,
+    ),
+]

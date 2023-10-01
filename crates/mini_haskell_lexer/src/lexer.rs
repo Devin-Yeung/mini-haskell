@@ -2,7 +2,7 @@ use crate::error::LexingError;
 use logos::{Logos, SpannedIter};
 use mini_haskell_diagnostic::span::Span;
 
-#[derive(Logos, Debug, PartialEq)]
+#[derive(Logos, Debug, PartialEq, Clone)]
 #[logos(skip r"[ \t\n\f]+")] // Ignore this regex pattern between tokens
 pub enum TokenTy {
     // The variable type Boolean, to declare a Boolean variable.
@@ -58,6 +58,32 @@ pub enum TokenTy {
 
     #[regex(r"[a-zA-z][a-zA-Z0-9_]*", | lex | lex.slice().to_owned())]
     Identifier(String),
+
+    EOF,
+}
+
+impl TokenTy {
+    pub fn name(&self) -> &'static str {
+        match self {
+            TokenTy::BoolDecl => "bool",
+            TokenTy::BoolLit(_) => "T/F",
+            TokenTy::NatLit(_) => "natural number",
+            TokenTy::Nat => "nat",
+            TokenTy::Func => "fun",
+            TokenTy::QuestionMark => "?",
+            TokenTy::Colon => ":",
+            TokenTy::Semicolon => ";",
+            TokenTy::LeftParen => "(",
+            TokenTy::RightParen => ")",
+            TokenTy::Plus => "+",
+            TokenTy::Ampersand => "&",
+            TokenTy::Arrow => "->",
+            TokenTy::Less => "<",
+            TokenTy::Comment(_) => "comment",
+            TokenTy::Identifier(_) => "identifier",
+            TokenTy::EOF => "EOF",
+        }
+    }
 }
 
 #[derive(Debug, PartialEq)]
