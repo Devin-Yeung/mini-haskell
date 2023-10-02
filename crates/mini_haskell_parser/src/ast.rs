@@ -2,8 +2,8 @@ use mini_haskell_diagnostic::span::Span;
 
 #[derive(Debug)]
 pub struct Expr {
-    kind: ExprKind,
-    span: Span,
+    pub kind: ExprKind,
+    pub span: Span,
 }
 
 #[derive(Debug)]
@@ -29,9 +29,9 @@ pub enum BinaryOp {
 
 #[derive(Debug)]
 pub struct BinaryExpr {
-    lhs: Box<Expr>,
-    op: BinaryOp,
-    rhs: Box<Expr>,
+    pub lhs: Box<Expr>,
+    pub op: BinaryOp,
+    pub rhs: Box<Expr>,
 }
 
 #[derive(Debug)]

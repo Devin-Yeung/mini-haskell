@@ -1,4 +1,4 @@
-use crate::ast::{Expr, ExprKind, Literal};
+use crate::ast::{BinaryExpr, BinaryOp, Expr, ExprKind, Literal};
 use crate::error::SyntaxError;
 use mini_haskell_lexer::lexer::{Token, TokenTy, Tokenizer};
 use std::iter::Peekable;
@@ -96,7 +96,28 @@ impl<'src> Parser<'src> {
     /// addition  → primary ("+" primary)*
     /// ```
     pub fn addition(&mut self) -> Result<Expr, SyntaxError> {
-        todo!()
+        let mut expr = self.primary()?;
+        dbg!(&expr);
+        loop {
+            let token = match self.peek_type()? {
+                TokenTy::Plus => self.advance()?,
+                _ => break,
+            };
+            dbg!(&token);
+
+            let rhs = self.primary()?;
+            dbg!(&rhs);
+            expr = Expr {
+                kind: ExprKind::BinaryExpr(BinaryExpr {
+                    lhs: Box::new(expr),
+                    op: BinaryOp::Plus,
+                    rhs: Box::new(rhs),
+                }),
+                span: token.span,
+            }
+        }
+        dbg!(&expr);
+        Ok(expr)
     }
 
     /// parse primary expression according to following rules:
@@ -153,5 +174,24 @@ mod tests {
             .map(|line| Parser::new(line).primary())
             .collect::<Vec<_>>();
         insta::assert_debug_snapshot!(asts);
+    });
+
+    unittest!(addition, |src| {
+        let asts = src
+            .split('\n')
+            .map(|line| Parser::new(line).addition())
+            .collect::<Vec<_>>();
+        insta::assert_debug_snapshot!(asts);
+
+        // let mut parser = Parser::new(src);
+        // let mut result = Vec::<Result<Token, SyntaxError>>::new();
+        // loop {
+        //     match parser.advance() {
+        //         Err(SyntaxError::UnexpectedEOF) => break,
+        //         Ok(tok) => result.push(Ok(tok)),
+        //         Err(err) => result.push(Err(err)),
+        //     }
+        // }
+        // insta::assert_debug_snapshot!(result);
     });
 }
