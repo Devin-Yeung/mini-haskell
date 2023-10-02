@@ -4,24 +4,42 @@ expression: asts
 ---
 [
     Ok(
-        Literal(
-            Bool(
-                false,
+        Expr {
+            kind: Literal(
+                Bool(
+                    false,
+                ),
             ),
-        ),
+            span: Span {
+                start: 0,
+                end: 1,
+            },
+        },
     ),
     Ok(
-        Literal(
-            Bool(
-                true,
+        Expr {
+            kind: Literal(
+                Bool(
+                    true,
+                ),
             ),
-        ),
+            span: Span {
+                start: 0,
+                end: 1,
+            },
+        },
     ),
     Ok(
-        Literal(
-            NatureNum(
-                123,
+        Expr {
+            kind: Literal(
+                NatureNum(
+                    123,
+                ),
             ),
-        ),
+            span: Span {
+                start: 0,
+                end: 3,
+            },
+        },
     ),
 ]

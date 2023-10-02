@@ -1,5 +1,13 @@
+use mini_haskell_diagnostic::span::Span;
+
 #[derive(Debug)]
-pub enum Expr {
+pub struct Expr {
+    kind: ExprKind,
+    span: Span,
+}
+
+#[derive(Debug)]
+pub enum ExprKind {
     Literal(Literal),
     BinaryExpr(BinaryExpr),
     CondExpr(CondExpr),
@@ -31,4 +39,10 @@ pub struct CondExpr {
     condition: Box<Expr>,
     then_branch: Box<Expr>,
     else_branch: Box<Expr>,
+}
+
+impl Expr {
+    pub fn new(kind: ExprKind, span: Span) -> Self {
+        Self { kind, span }
+    }
 }

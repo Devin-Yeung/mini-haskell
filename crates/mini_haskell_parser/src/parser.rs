@@ -1,6 +1,6 @@
-use crate::ast::{Expr, Literal};
+use crate::ast::{Expr, ExprKind, Literal};
 use crate::error::SyntaxError;
-use mini_haskell_lexer::lexer::{TokenTy, Tokenizer};
+use mini_haskell_lexer::lexer::{Token, TokenTy, Tokenizer};
 use std::iter::Peekable;
 
 pub struct Parser<'src> {
@@ -14,7 +14,7 @@ impl<'src> Parser<'src> {
         }
     }
 
-    fn consume(&mut self, ty: TokenTy) -> Result<TokenTy, SyntaxError> {
+    fn consume(&mut self, ty: TokenTy) -> Result<Token, SyntaxError> {
         dbg!(self.tokenizer.peek());
         match self.peek_type()? {
             found if found == ty => Ok(self.advance()?),
@@ -38,22 +38,22 @@ impl<'src> Parser<'src> {
         match self.tokenizer.peek() {
             None => Ok(TokenTy::EOF),
             Some(Ok(token)) => Ok(token.ty.clone()),
-            Some(Err(_)) => self.advance(),
+            Some(Err(_)) => Ok(self.advance()?.ty),
         }
     }
 
-    fn advance(&mut self) -> Result<TokenTy, SyntaxError> {
+    fn advance(&mut self) -> Result<Token, SyntaxError> {
         self.tokenizer
             .next()
             .map_or(Err(SyntaxError::UnexpectedEOF), |inner| {
                 match inner {
-                    Ok(tok) => Ok(tok.ty),
+                    Ok(tok) => Ok(tok),
                     Err(_) => {
                         // lexing error is ignored and skip to next valid token
                         loop {
                             match self.tokenizer.peek() {
                                 None => return Err(SyntaxError::UnexpectedEOF),
-                                Some(Ok(tok)) => return Ok(tok.ty.clone()),
+                                Some(Ok(tok)) => return Ok(tok.clone()),
                                 Some(Err(_)) => {
                                     self.tokenizer.next();
                                 }
@@ -113,8 +113,14 @@ impl<'src> Parser<'src> {
     /// ```
     fn primary(&mut self) -> Result<Expr, SyntaxError> {
         match self.peek_type()? {
-            TokenTy::BoolLit(b) => Ok(Expr::Literal(Literal::Bool(b))),
-            TokenTy::NatLit(n) => Ok(Expr::Literal(Literal::NatureNum(n))),
+            TokenTy::BoolLit(b) => Ok(Expr::new(
+                ExprKind::Literal(Literal::Bool(b)),
+                self.advance()?.span,
+            )),
+            TokenTy::NatLit(n) => Ok(Expr::new(
+                ExprKind::Literal(Literal::NatureNum(n)),
+                self.advance()?.span,
+            )),
             TokenTy::Identifier(_) => todo!(),
             _ => Err(SyntaxError::Expected("expression")),
         }
@@ -125,13 +131,13 @@ impl<'src> Parser<'src> {
 mod tests {
     use crate::parser::Parser;
     use crate::parser::SyntaxError;
-    use crate::parser::TokenTy;
+    use crate::parser::Token;
     use mini_haskell_lexer::lexer::TokenTy::NatLit;
     use testsuite::unittest;
 
     unittest!(advance, |src| {
         let mut parser = Parser::new(src);
-        let mut result = Vec::<Result<TokenTy, SyntaxError>>::new();
+        let mut result = Vec::<Result<Token, SyntaxError>>::new();
         loop {
             match parser.advance() {
                 Err(SyntaxError::UnexpectedEOF) => break,
@@ -144,13 +150,7 @@ mod tests {
 
     unittest!(consume, |src| {
         let mut parser = Parser::new(src);
-        let result = vec![
-            parser.peek_type(),
-            parser.consume(NatLit(1)),
-            parser.peek_type(),
-            parser.consume(NatLit(2)),
-            parser.peek_type(),
-        ];
+        let result = vec![parser.consume(NatLit(1)), parser.consume(NatLit(2))];
         insta::assert_debug_snapshot!(result);
     });
 

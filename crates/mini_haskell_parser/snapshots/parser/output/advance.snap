@@ -4,18 +4,36 @@ expression: result
 ---
 [
     Ok(
-        NatLit(
-            1,
-        ),
+        Token {
+            ty: NatLit(
+                1,
+            ),
+            span: Span {
+                start: 0,
+                end: 1,
+            },
+        },
     ),
     Ok(
-        NatLit(
-            2,
-        ),
+        Token {
+            ty: NatLit(
+                2,
+            ),
+            span: Span {
+                start: 4,
+                end: 5,
+            },
+        },
     ),
     Ok(
-        NatLit(
-            2,
-        ),
+        Token {
+            ty: NatLit(
+                2,
+            ),
+            span: Span {
+                start: 4,
+                end: 5,
+            },
+        },
     ),
 ]
