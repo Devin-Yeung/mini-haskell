@@ -20,13 +20,11 @@ impl<'a> Reporter<'a> {
             .reports
             .into_iter()
             .map(|report| {
-                dbg!(&report.message);
                 let mut builder: ReportBuilder<Range<usize>> =
                     ariadne::Report::build(ariadne::ReportKind::Error, (), report.offset)
                         .with_message(report.message);
 
                 for label in report.labels {
-                    dbg!(&label.hint);
                     builder = builder.with_label(
                         Into::<ariadne::Label>::into(label.span).with_message(label.hint),
                     );

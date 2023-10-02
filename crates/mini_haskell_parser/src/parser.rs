@@ -15,7 +15,6 @@ impl<'src> Parser<'src> {
     }
 
     fn consume(&mut self, ty: TokenTy) -> Result<Token, SyntaxError> {
-        dbg!(self.tokenizer.peek());
         match self.peek_type()? {
             found if found == ty => Ok(self.advance()?),
             found => Err(SyntaxError::UnexpectedToken {
@@ -97,16 +96,13 @@ impl<'src> Parser<'src> {
     /// ```
     pub fn addition(&mut self) -> Result<Expr, SyntaxError> {
         let mut expr = self.primary()?;
-        dbg!(&expr);
         loop {
             let token = match self.peek_type()? {
                 TokenTy::Plus => self.advance()?,
                 _ => break,
             };
-            dbg!(&token);
 
             let rhs = self.primary()?;
-            dbg!(&rhs);
             expr = Expr {
                 kind: ExprKind::BinaryExpr(BinaryExpr {
                     lhs: Box::new(expr),
@@ -116,7 +112,6 @@ impl<'src> Parser<'src> {
                 span: token.span,
             }
         }
-        dbg!(&expr);
         Ok(expr)
     }
 
