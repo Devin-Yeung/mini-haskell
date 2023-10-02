@@ -64,6 +64,48 @@ impl<'src> Parser<'src> {
             })
     }
 
+    /// parse expression according to following rules:
+    /// ```text
+    /// expression  → conditional ;
+    /// ```
+    pub fn expression(&mut self) -> Result<Expr, SyntaxError> {
+        todo!()
+    }
+
+    /// parse conditional expression according to following rules:
+    /// ```text
+    /// conditional  → logical ? logical :logical
+    ///              | logical ;
+    /// ```
+    pub fn conditional(&mut self) -> Result<Expr, SyntaxError> {
+        todo!()
+    }
+
+    /// parse logical expression according to following rules:
+    /// ```text
+    /// logical  → comparison ( "&" comparison )*
+    /// ```
+    pub fn logical(&mut self) -> Result<Expr, SyntaxError> {
+        todo!()
+    }
+
+    /// parse comparison expression according to following rules:
+    /// ```text
+    /// comparison  → addition ( ( "<" | "=" ) addition )*
+    ///             | addition ;
+    /// ```
+    pub fn comparison(&mut self) -> Result<Expr, SyntaxError> {
+        todo!()
+    }
+
+    /// parse comparison expression according to following rules:
+    /// ```text
+    /// addition  → primary ("+" primary)*
+    /// ```
+    pub fn addition(&mut self) -> Result<Expr, SyntaxError> {
+        todo!()
+    }
+
     /// parse primary expression according to following rules:
     ///
     /// ```text
