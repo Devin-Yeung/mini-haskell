@@ -1,3 +1,4 @@
+use crate::ast::{Expr, Literal};
 use crate::error::SyntaxError;
 use mini_haskell_lexer::lexer::{TokenTy, Tokenizer};
 use std::iter::Peekable;
@@ -62,6 +63,20 @@ impl<'src> Parser<'src> {
                 }
             })
     }
+
+    /// parse primary expression according to following rules:
+    ///
+    /// ```text
+    /// primary  → NAT | "T" | "F" | IDENTIFIER ;
+    /// ```
+    fn primary(&mut self) -> Result<Expr, SyntaxError> {
+        match self.peek_type()? {
+            TokenTy::BoolLit(b) => Ok(Expr::Literal(Literal::Bool(b))),
+            TokenTy::NatLit(n) => Ok(Expr::Literal(Literal::NatureNum(n))),
+            TokenTy::Identifier(_) => todo!(),
+            _ => Err(SyntaxError::Expected("expression")),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -95,5 +110,13 @@ mod tests {
             parser.peek_type(),
         ];
         insta::assert_debug_snapshot!(result);
+    });
+
+    unittest!(primary, |src| {
+        let asts = src
+            .split('\n')
+            .map(|line| Parser::new(line).primary())
+            .collect::<Vec<_>>();
+        insta::assert_debug_snapshot!(asts);
     });
 }

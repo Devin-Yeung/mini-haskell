@@ -1,0 +1,27 @@
+---
+source: crates/mini_haskell_parser/src/parser.rs
+expression: asts
+---
+[
+    Ok(
+        Literal(
+            Bool(
+                false,
+            ),
+        ),
+    ),
+    Ok(
+        Literal(
+            Bool(
+                true,
+            ),
+        ),
+    ),
+    Ok(
+        Literal(
+            NatureNum(
+                123,
+            ),
+        ),
+    ),
+]
