@@ -36,7 +36,7 @@ impl<'src> Parser<'src> {
     fn peek_type(&mut self) -> Result<TokenTy, SyntaxError> {
         loop {
             match self.tokenizer.peek() {
-                None => return Err(SyntaxError::UnexpectedEOF),
+                None => return Ok(TokenTy::EOF),
                 Some(Ok(token)) => return Ok(token.ty.clone()),
                 Some(Err(_)) => {
                     self.tokenizer.next();
