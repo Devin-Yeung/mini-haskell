@@ -34,34 +34,27 @@ impl<'src> Parser<'src> {
     }
 
     fn peek_type(&mut self) -> Result<TokenTy, SyntaxError> {
-        dbg!(self.tokenizer.peek());
-        match self.tokenizer.peek() {
-            None => Ok(TokenTy::EOF),
-            Some(Ok(token)) => Ok(token.ty.clone()),
-            Some(Err(_)) => Ok(self.advance()?.ty),
+        loop {
+            match self.tokenizer.peek() {
+                None => return Err(SyntaxError::UnexpectedEOF),
+                Some(Ok(token)) => return Ok(token.ty.clone()),
+                Some(Err(_)) => {
+                    self.tokenizer.next();
+                }
+            }
         }
     }
 
     fn advance(&mut self) -> Result<Token, SyntaxError> {
-        self.tokenizer
-            .next()
-            .map_or(Err(SyntaxError::UnexpectedEOF), |inner| {
-                match inner {
-                    Ok(tok) => Ok(tok),
-                    Err(_) => {
-                        // lexing error is ignored and skip to next valid token
-                        loop {
-                            match self.tokenizer.peek() {
-                                None => return Err(SyntaxError::UnexpectedEOF),
-                                Some(Ok(tok)) => return Ok(tok.clone()),
-                                Some(Err(_)) => {
-                                    self.tokenizer.next();
-                                }
-                            }
-                        }
-                    }
+        loop {
+            match self.tokenizer.peek() {
+                None => return Err(SyntaxError::UnexpectedEOF),
+                Some(Ok(_)) => return Ok(self.tokenizer.next().unwrap().unwrap()),
+                Some(Err(_)) => {
+                    self.tokenizer.next();
                 }
-            })
+            }
+        }
     }
 
     /// parse expression according to following rules:
