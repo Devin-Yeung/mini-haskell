@@ -1,6 +1,6 @@
 use ariadne::Label;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy, Eq)]
 pub struct Span {
     pub start: usize,
     pub end: usize,

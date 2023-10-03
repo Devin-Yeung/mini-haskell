@@ -1,4 +1,5 @@
 use thiserror::Error;
+
 #[derive(Error, Debug, Eq, PartialEq, Copy, Clone)]
 pub enum SyntaxError {
     #[error("Unexpected EOF")]

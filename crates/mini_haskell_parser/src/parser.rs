@@ -83,11 +83,33 @@ impl<'src> Parser<'src> {
 
     /// parse comparison expression according to following rules:
     /// ```text
-    /// comparison  → addition ( ( "<" | "=" ) addition )*
-    ///             | addition ;
+    /// comparison  → addition ( ( "<" | "=" ) addition )* ;
     /// ```
     pub fn comparison(&mut self) -> Result<Expr, SyntaxError> {
-        todo!()
+        let mut expr = self.addition()?;
+        loop {
+            let token = match self.peek_type()? {
+                TokenTy::Less | TokenTy::Equal => self.advance()?,
+                _ => break,
+            };
+
+            let op = match token.ty {
+                TokenTy::Less => BinaryOp::Less,
+                TokenTy::Equal => BinaryOp::Equal,
+                _ => unreachable!(),
+            };
+
+            let rhs = self.addition()?;
+            expr = Expr {
+                kind: ExprKind::BinaryExpr(BinaryExpr {
+                    lhs: Box::new(expr),
+                    op,
+                    rhs: Box::new(rhs),
+                }),
+                span: token.span,
+            }
+        }
+        Ok(expr)
     }
 
     /// parse comparison expression according to following rules:
@@ -177,16 +199,13 @@ mod tests {
             .map(|line| Parser::new(line).addition())
             .collect::<Vec<_>>();
         insta::assert_debug_snapshot!(asts);
+    });
 
-        // let mut parser = Parser::new(src);
-        // let mut result = Vec::<Result<Token, SyntaxError>>::new();
-        // loop {
-        //     match parser.advance() {
-        //         Err(SyntaxError::UnexpectedEOF) => break,
-        //         Ok(tok) => result.push(Ok(tok)),
-        //         Err(err) => result.push(Err(err)),
-        //     }
-        // }
-        // insta::assert_debug_snapshot!(result);
+    unittest!(comparison, |src| {
+        let asts = src
+            .split('\n')
+            .map(|line| Parser::new(line).comparison())
+            .collect::<Vec<_>>();
+        insta::assert_debug_snapshot!(asts);
     });
 }

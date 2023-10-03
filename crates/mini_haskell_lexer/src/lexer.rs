@@ -52,6 +52,9 @@ pub enum TokenTy {
     #[token("<")]
     Less,
 
+    #[token("=")]
+    Equal,
+
     #[regex(r"\[[^\]]*\]", | lex | lex.slice().to_owned())]
     // see https://github.com/maciejhirsz/logos/issues/246
     Comment(String),
@@ -79,6 +82,7 @@ impl TokenTy {
             TokenTy::Ampersand => "&",
             TokenTy::Arrow => "->",
             TokenTy::Less => "<",
+            TokenTy::Equal => "=",
             TokenTy::Comment(_) => "comment",
             TokenTy::Identifier(_) => "identifier",
             TokenTy::EOF => "EOF",

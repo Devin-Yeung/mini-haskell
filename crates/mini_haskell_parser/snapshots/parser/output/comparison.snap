@@ -1,0 +1,107 @@
+---
+source: crates/mini_haskell_parser/src/parser.rs
+expression: asts
+---
+[
+    Ok(
+        Expr {
+            kind: BinaryExpr(
+                BinaryExpr {
+                    lhs: Expr {
+                        kind: BinaryExpr(
+                            BinaryExpr {
+                                lhs: Expr {
+                                    kind: BinaryExpr(
+                                        BinaryExpr {
+                                            lhs: Expr {
+                                                kind: Literal(
+                                                    NatureNum(
+                                                        1,
+                                                    ),
+                                                ),
+                                                span: Span {
+                                                    start: 0,
+                                                    end: 1,
+                                                },
+                                            },
+                                            op: Plus,
+                                            rhs: Expr {
+                                                kind: Literal(
+                                                    NatureNum(
+                                                        2,
+                                                    ),
+                                                ),
+                                                span: Span {
+                                                    start: 4,
+                                                    end: 5,
+                                                },
+                                            },
+                                        },
+                                    ),
+                                    span: Span {
+                                        start: 2,
+                                        end: 3,
+                                    },
+                                },
+                                op: Less,
+                                rhs: Expr {
+                                    kind: BinaryExpr(
+                                        BinaryExpr {
+                                            lhs: Expr {
+                                                kind: Literal(
+                                                    NatureNum(
+                                                        2,
+                                                    ),
+                                                ),
+                                                span: Span {
+                                                    start: 8,
+                                                    end: 9,
+                                                },
+                                            },
+                                            op: Plus,
+                                            rhs: Expr {
+                                                kind: Literal(
+                                                    NatureNum(
+                                                        3,
+                                                    ),
+                                                ),
+                                                span: Span {
+                                                    start: 12,
+                                                    end: 13,
+                                                },
+                                            },
+                                        },
+                                    ),
+                                    span: Span {
+                                        start: 10,
+                                        end: 11,
+                                    },
+                                },
+                            },
+                        ),
+                        span: Span {
+                            start: 6,
+                            end: 7,
+                        },
+                    },
+                    op: Equal,
+                    rhs: Expr {
+                        kind: Literal(
+                            Bool(
+                                false,
+                            ),
+                        ),
+                        span: Span {
+                            start: 16,
+                            end: 17,
+                        },
+                    },
+                },
+            ),
+            span: Span {
+                start: 14,
+                end: 15,
+            },
+        },
+    ),
+]
