@@ -36,9 +36,9 @@ pub struct BinaryExpr {
 
 #[derive(Debug)]
 pub struct CondExpr {
-    condition: Box<Expr>,
-    then_branch: Box<Expr>,
-    else_branch: Box<Expr>,
+    pub condition: Box<Expr>,
+    pub then_branch: Box<Expr>,
+    pub else_branch: Box<Expr>,
 }
 
 impl Expr {

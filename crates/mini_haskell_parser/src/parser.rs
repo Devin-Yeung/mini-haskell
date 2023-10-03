@@ -1,5 +1,6 @@
-use crate::ast::{BinaryExpr, BinaryOp, Expr, ExprKind, Literal};
+use crate::ast::{BinaryExpr, BinaryOp, CondExpr, Expr, ExprKind, Literal};
 use crate::error::SyntaxError;
+use mini_haskell_diagnostic::span::Span;
 use mini_haskell_lexer::lexer::{Token, TokenTy, Tokenizer};
 use std::iter::Peekable;
 
@@ -66,11 +67,31 @@ impl<'src> Parser<'src> {
 
     /// parse conditional expression according to following rules:
     /// ```text
-    /// conditional  → logical ? logical :logical
-    ///              | logical ;
+    /// conditional  → logical ("?" logical ":" logical)? ;
     /// ```
     pub fn conditional(&mut self) -> Result<Expr, SyntaxError> {
-        todo!()
+        let condition = self.logical()?;
+        match self.peek_type()? {
+            TokenTy::QuestionMark => {
+                self.consume(TokenTy::QuestionMark)?;
+                let then_branch = self.logical()?;
+                self.consume(TokenTy::Colon)?;
+                let else_branch = self.logical()?;
+                let span = Span {
+                    start: condition.span.start,
+                    end: else_branch.span.end,
+                };
+                Ok(Expr {
+                    kind: ExprKind::CondExpr(CondExpr {
+                        condition: Box::new(condition),
+                        then_branch: Box::new(then_branch),
+                        else_branch: Box::new(else_branch),
+                    }),
+                    span,
+                })
+            }
+            _ => return Ok(condition),
+        }
     }
 
     /// parse logical expression according to following rules:
@@ -84,7 +105,6 @@ impl<'src> Parser<'src> {
                 TokenTy::Ampersand => self.advance()?,
                 _ => break,
             };
-            dbg!(&token);
 
             let rhs = self.comparison()?;
             expr = Expr {
@@ -231,6 +251,14 @@ mod tests {
         let asts = src
             .split('\n')
             .map(|line| Parser::new(line).logical())
+            .collect::<Vec<_>>();
+        insta::assert_debug_snapshot!(asts);
+    });
+
+    unittest!(conditional, |src| {
+        let asts = src
+            .split('\n')
+            .map(|line| Parser::new(line).conditional())
             .collect::<Vec<_>>();
         insta::assert_debug_snapshot!(asts);
     });
