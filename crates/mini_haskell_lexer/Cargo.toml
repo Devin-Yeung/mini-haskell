@@ -9,6 +9,6 @@ edition = "2021"
 logos = "0.13.0"
 insta = { workspace = true, features = ["glob"] }
 thiserror = { workspace = true }
-mini_haskell_diagnostic = { workspace = true }
-testsuite = { workspace = true }
-testsuite_macros = { workspace = true }
+mini_haskell_diagnostic = { path = "../mini_haskell_diagnostic" }
+testsuite = { path = "../testsuite" }
+testsuite_macros = { path = "../testsuite_macros" }

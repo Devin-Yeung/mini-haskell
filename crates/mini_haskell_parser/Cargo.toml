@@ -6,9 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-mini_haskell_lexer = { workspace = true }
-mini_haskell_diagnostic = { workspace = true }
-testsuite = { workspace = true }
-testsuite_macros = { workspace = true }
+mini_haskell_lexer = { path = "../mini_haskell_lexer" }
+mini_haskell_diagnostic = { path = "../mini_haskell_diagnostic" }
+testsuite = { path = "../testsuite" }
+testsuite_macros = { path = "../testsuite_macros" }
 thiserror = { workspace = true }
 insta = { workspace = true }

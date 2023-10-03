@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 insta = { workspace = true, features = ["glob"] }
 once_cell = "1.18.0"
-testsuite_macros = { workspace = true }
+testsuite_macros = { path = "../testsuite_macros" }
