@@ -78,7 +78,25 @@ impl<'src> Parser<'src> {
     /// logical  → comparison ( "&" comparison )*
     /// ```
     pub fn logical(&mut self) -> Result<Expr, SyntaxError> {
-        todo!()
+        let mut expr = self.comparison()?;
+        loop {
+            let token = match self.peek_type()? {
+                TokenTy::Ampersand => self.advance()?,
+                _ => break,
+            };
+            dbg!(&token);
+
+            let rhs = self.comparison()?;
+            expr = Expr {
+                kind: ExprKind::BinaryExpr(BinaryExpr {
+                    lhs: Box::new(expr),
+                    op: BinaryOp::Ampersand,
+                    rhs: Box::new(rhs),
+                }),
+                span: token.span,
+            }
+        }
+        Ok(expr)
     }
 
     /// parse comparison expression according to following rules:
@@ -205,6 +223,14 @@ mod tests {
         let asts = src
             .split('\n')
             .map(|line| Parser::new(line).comparison())
+            .collect::<Vec<_>>();
+        insta::assert_debug_snapshot!(asts);
+    });
+
+    unittest!(logical, |src| {
+        let asts = src
+            .split('\n')
+            .map(|line| Parser::new(line).logical())
             .collect::<Vec<_>>();
         insta::assert_debug_snapshot!(asts);
     });
