@@ -10,16 +10,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-# See: https://github:com/dependabot/dependabot-core/issues/7896:
-#    groups:
-#      dependencies:
-#        update-types:
-#          - "minor"
-#          - "patch"
-#    ignore:
-#      - dependency-name: "*"
-#        # patch and minor updates don't matter for libraries
-#        # remove this ignore rule if your package has binaries
-#        update-types:
-#          - "version-update:semver-patch"
-#          - "version-update:semver-minor"
+    # See: https://github.com/dependabot/dependabot-core/issues/7896
+    groups:
+      dependencies:
+        update-types:
+          - "minor"
+          - "patch"
