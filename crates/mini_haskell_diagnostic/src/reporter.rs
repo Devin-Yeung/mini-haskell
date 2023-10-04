@@ -44,11 +44,11 @@ impl DiagnosticTupleBuilder {
             path.to_string_lossy(),
             source_text.to_owned(),
         ));
-        let diagnostics = diagnostics
+
+        diagnostics
             .into_iter()
             .map(|diagnostic| diagnostic.into().with_source_code(Arc::clone(&source)))
-            .collect();
-        diagnostics
+            .collect()
     }
 }
 
