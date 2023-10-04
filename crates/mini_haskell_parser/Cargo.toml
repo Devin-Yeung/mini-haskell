@@ -12,3 +12,4 @@ testsuite = { path = "../testsuite" }
 testsuite_macros = { path = "../testsuite_macros" }
 thiserror = { workspace = true }
 insta = { workspace = true }
+debug_tree = "0.4.0"

@@ -1,0 +1,23 @@
+---
+source: crates/mini_haskell_parser/src/fmt.rs
+expression: ast
+---
+AST
+├╼ condition
+│ └╼ Bool(false)
+├╼ then-branch
+│ └╼ Nat(0)
+└╼ else-branch
+  ├╼ lhs
+  │ ├╼ lhs
+  │ │ └╼ Nat(1)
+  │ ├╼ ops: <
+  │ └╼ rhs
+  │   └╼ Nat(0)
+  ├╼ ops: &
+  └╼ rhs
+    ├╼ lhs
+    │ └╼ Nat(2)
+    ├╼ ops: =
+    └╼ rhs
+      └╼ Nat(3)
