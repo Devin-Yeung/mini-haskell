@@ -1,87 +1,113 @@
-use crate::diagnostic::DiagnosticContext;
-use ariadne::ReportBuilder;
-use std::io::Cursor;
-use std::ops::Range;
+use miette::{Error, GraphicalReportHandler, GraphicalTheme, NamedSource};
+use std::fs;
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
 
-pub struct Reporter<'a> {
-    // name of the source file
-    // name: &'a str,
-    // source code
-    source: &'a str,
-    // reporter config
-    config: ReporterConfig,
-    // diagnostic context
-    context: DiagnosticContext,
+pub struct DiagnosticTuple {
+    path: PathBuf,
+    errors: Vec<Error>,
 }
 
-impl<'a> Reporter<'a> {
-    pub fn stringify(self) -> Vec<String> {
-        self.context
-            .reports
+pub struct DiagnosticTupleBuilder {
+    path: PathBuf,
+    errors: Vec<Error>,
+}
+
+impl DiagnosticTupleBuilder {
+    pub fn new<P: AsRef<Path>>(path: P) -> Self {
+        Self {
+            path: path.as_ref().to_path_buf(),
+            errors: Vec::new(),
+        }
+    }
+
+    pub fn diagnose(&mut self, err: impl Into<Error>) -> &mut Self {
+        self.errors.push(err.into());
+        self
+    }
+
+    pub fn build(self) -> DiagnosticTuple {
+        let src = fs::read_to_string(&self.path).unwrap();
+        let errors = Self::wrap_diagnostics(&self.path, &src, self.errors);
+        DiagnosticTuple {
+            path: self.path,
+            errors,
+        }
+    }
+
+    pub fn wrap_diagnostics(
+        path: &Path,
+        source_text: &str,
+        diagnostics: Vec<impl Into<Error>>,
+    ) -> Vec<Error> {
+        let source = Arc::new(NamedSource::new(
+            path.to_string_lossy(),
+            source_text.to_owned(),
+        ));
+        let diagnostics = diagnostics
             .into_iter()
-            .map(|report| {
-                let mut builder: ReportBuilder<Range<usize>> =
-                    ariadne::Report::build(ariadne::ReportKind::Error, (), report.offset)
-                        .with_message(report.message);
-
-                for label in report.labels {
-                    builder = builder.with_label(
-                        Into::<ariadne::Label>::into(label.span).with_message(label.hint),
-                    );
-                }
-                let report = builder
-                    .with_config(ariadne::Config::default().with_color(self.config.color))
-                    .finish();
-
-                let mut cursor = Cursor::new(Vec::<u8>::new());
-                report
-                    .write(ariadne::Source::from(self.source), &mut cursor)
-                    .unwrap();
-                String::from_utf8(cursor.into_inner()).unwrap()
-            })
-            .collect::<Vec<_>>()
+            .map(|diagnostic| diagnostic.into().with_source_code(Arc::clone(&source)))
+            .collect();
+        diagnostics
     }
 }
 
-pub struct ReporterBuilder<'a> {
-    source: Option<&'a str>,
-    config: Option<ReporterConfig>,
-    context: Option<DiagnosticContext>,
+pub struct Reporter {
+    handler: GraphicalReportHandler,
+    diagnostics: Vec<DiagnosticTuple>,
 }
 
-impl<'a> ReporterBuilder<'a> {
+impl Reporter {
     pub fn new() -> Self {
         Self {
-            source: None,
-            config: None,
-            context: None,
+            handler: GraphicalReportHandler::new_themed(GraphicalTheme::unicode_nocolor()),
+            diagnostics: Vec::new(),
         }
     }
 
-    pub fn source(mut self, source: &'a str) -> Self {
-        self.source = Some(source);
-        self
+    pub fn report(&mut self, err: DiagnosticTuple) {
+        self.diagnostics.push(err);
     }
 
-    pub fn context(mut self, context: DiagnosticContext) -> Self {
-        self.context = Some(context);
-        self
-    }
-
-    pub fn config(mut self, config: ReporterConfig) -> Self {
-        self.config = Some(config);
-        self
-    }
-
-    pub fn build(self) -> Reporter<'a> {
-        Reporter {
-            source: self.source.unwrap(),
-            config: self.config.unwrap(),
-            context: self.context.unwrap(),
+    pub fn string(&self) -> String {
+        let mut err = String::new();
+        for diagnostic in &self.diagnostics {
+            for error in &diagnostic.errors {
+                self.handler
+                    .render_report(&mut err, error.as_ref())
+                    .unwrap();
+            }
         }
+        err
     }
 }
 
-pub struct ReporterConfig {
-    pub color: bool,
+#[cfg(test)]
+mod test {
+    use crate::reporter::{DiagnosticTupleBuilder, Reporter};
+    use crate::span::Span;
+    use miette::Diagnostic;
+    use testsuite::unittest;
+    use thiserror::Error;
+
+    #[derive(Diagnostic, Error, Debug)]
+    pub enum Foo {
+        #[error("This is an example error")]
+        #[diagnostic(help("This is an example help msg"))]
+        Bar(#[label("Remove this space")] Span),
+    }
+
+    unittest!(simple_err, |_| {
+        let err = Foo::Bar(Span { start: 5, end: 5 });
+
+        let mut builder = DiagnosticTupleBuilder::new("snapshots/reporter/input/simple_err.hs");
+        builder.diagnose(err);
+        let diagnostic = builder.build();
+
+        let mut reporter = Reporter::new();
+        reporter.report(diagnostic);
+
+        let result = reporter.string();
+        insta::assert_snapshot!(result);
+    });
 }
