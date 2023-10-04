@@ -9,4 +9,8 @@ edition = "2021"
 ariadne = "0.3.0"
 logos = "0.13.0"
 insta = { workspace = true, features = ["glob"] }
+miette = { workspace = true, features = ["fancy"] }
 testsuite = { path = "../testsuite" }
+
+[dev-dependencies]
+thiserror = { workspace = true }

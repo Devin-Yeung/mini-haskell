@@ -1,0 +1,12 @@
+---
+source: crates/mini_haskell_diagnostic/src/reporter.rs
+expression: result
+---
+  × This is an example error
+   ╭─[snapshots/reporter/input/simple_err.hs:1:1]
+ 1 │ Hello World!
+   ·      ▲
+   ·      ╰── Remove this space
+   ╰────
+  help: This is an example help msg
+

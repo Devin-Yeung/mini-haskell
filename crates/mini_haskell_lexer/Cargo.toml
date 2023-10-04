@@ -12,3 +12,4 @@ thiserror = { workspace = true }
 mini_haskell_diagnostic = { path = "../mini_haskell_diagnostic" }
 testsuite = { path = "../testsuite" }
 testsuite_macros = { path = "../testsuite_macros" }
+miette = { workspace = true, features = ["fancy"] }

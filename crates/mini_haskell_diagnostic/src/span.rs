@@ -1,4 +1,5 @@
 use ariadne::Label;
+use miette::SourceSpan;
 
 #[derive(Debug, PartialEq, Clone, Copy, Eq)]
 pub struct Span {
@@ -18,5 +19,11 @@ impl From<logos::Span> for Span {
 impl From<Span> for ariadne::Label {
     fn from(val: Span) -> Self {
         Label::new(val.start..val.end)
+    }
+}
+
+impl Into<miette::SourceSpan> for Span {
+    fn into(self) -> SourceSpan {
+        (self.start, self.end - self.start).into()
     }
 }
