@@ -90,7 +90,7 @@ impl<'src> Parser<'src> {
                     span,
                 })
             }
-            _ => return Ok(condition),
+            _ => Ok(condition),
         }
     }
 
