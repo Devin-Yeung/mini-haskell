@@ -104,7 +104,7 @@ mod tests {
     use crate::parser::Parser;
     use testsuite::unittest;
 
-    unittest!(expr, |src| {
+    unittest!(expr, |_, src| {
         let ast = Parser::new(&src).conditional().unwrap().ast();
         insta::assert_snapshot!(ast);
     });

@@ -100,7 +100,6 @@ mod test {
     use crate::reporter::{DiagnosticTuple, Reporter};
     use crate::span::Span;
     use miette::Diagnostic;
-    use std::path::Path;
     use testsuite::unittest;
     use thiserror::Error;
 
@@ -111,10 +110,9 @@ mod test {
         Bar(#[label("Remove this space")] Span),
     }
 
-    unittest!(simple_err, |_| {
+    unittest!(simple_err, |path, _| {
         let err = Foo::Bar(Span { start: 5, end: 5 });
 
-        let path = Path::new("snapshots/reporter/input/simple_err.hs");
         let errors = vec![err.clone()];
         let diagnostic: DiagnosticTuple = (path, errors).into();
 

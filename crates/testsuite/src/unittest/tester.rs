@@ -18,13 +18,13 @@ pub struct Tester {
 }
 
 impl Tester {
-    fn source_exec<F: FnMut(&str)>(&self, mut f: F) {
+    fn source_exec<F: FnMut(&Path, &str)>(&self, mut f: F) {
         let source = fs::read_to_string(&self.source_path).unwrap();
         insta::with_settings!({
             snapshot_path => &self.snapshot_path,
             prepend_module_to_snapshot => false,
         },{
-            f(&source);
+            f(&self.source_path, &source);
         });
     }
 }
@@ -89,13 +89,18 @@ impl<P: AsRef<Path>, S: AsRef<str>> TesterBuilder<P, S> {
 
     fn build(self) -> Tester {
         Tester {
-            source_path: self.source_path(),
+            // use relative dir instead of absolute
+            source_path: self
+                .source_path()
+                .strip_prefix(&self.cargo_manifest_dir)
+                .unwrap()
+                .into(),
             snapshot_path: self.snapshot_path(),
         }
     }
 }
 
-pub fn source_exec<F: FnMut(&str)>(
+pub fn source_exec<F: FnMut(&Path, &str)>(
     source_name: &str,
     module_path: &str,
     cargo_manifest_dir: &str,

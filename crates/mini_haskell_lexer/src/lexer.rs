@@ -136,12 +136,12 @@ mod tests {
     use crate::lexer::Token;
     use testsuite::unittest;
 
-    unittest!(all_tokens, |src| {
+    unittest!(all_tokens, |_, src| {
         let tokens = Token::tokens(&src);
         insta::assert_debug_snapshot!(tokens);
     });
 
-    unittest!(invalid_token, |src| {
+    unittest!(invalid_token, |_, src| {
         let tokens = Token::tokens(&src);
         insta::assert_debug_snapshot!(tokens);
     });

@@ -204,7 +204,7 @@ mod tests {
     use mini_haskell_lexer::lexer::TokenTy::NatLit;
     use testsuite::unittest;
 
-    unittest!(advance, |src| {
+    unittest!(advance, |_, src| {
         let mut parser = Parser::new(src);
         let mut result = Vec::<Result<Token, SyntaxError>>::new();
         loop {
@@ -217,13 +217,13 @@ mod tests {
         insta::assert_debug_snapshot!(result);
     });
 
-    unittest!(consume, |src| {
+    unittest!(consume, |_, src| {
         let mut parser = Parser::new(src);
         let result = vec![parser.consume(NatLit(1)), parser.consume(NatLit(2))];
         insta::assert_debug_snapshot!(result);
     });
 
-    unittest!(primary, |src| {
+    unittest!(primary, |_, src| {
         let asts = src
             .split('\n')
             .map(|line| Parser::new(line).primary())
@@ -231,7 +231,7 @@ mod tests {
         insta::assert_debug_snapshot!(asts);
     });
 
-    unittest!(addition, |src| {
+    unittest!(addition, |_, src| {
         let asts = src
             .split('\n')
             .map(|line| Parser::new(line).addition())
@@ -239,7 +239,7 @@ mod tests {
         insta::assert_debug_snapshot!(asts);
     });
 
-    unittest!(comparison, |src| {
+    unittest!(comparison, |_, src| {
         let asts = src
             .split('\n')
             .map(|line| Parser::new(line).comparison())
@@ -247,7 +247,7 @@ mod tests {
         insta::assert_debug_snapshot!(asts);
     });
 
-    unittest!(logical, |src| {
+    unittest!(logical, |_, src| {
         let asts = src
             .split('\n')
             .map(|line| Parser::new(line).logical())
@@ -255,7 +255,7 @@ mod tests {
         insta::assert_debug_snapshot!(asts);
     });
 
-    unittest!(conditional, |src| {
+    unittest!(conditional, |_, src| {
         let asts = src
             .split('\n')
             .map(|line| Parser::new(line).conditional())
