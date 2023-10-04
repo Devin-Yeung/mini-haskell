@@ -8,10 +8,10 @@ pub struct DiagnosticTuple {
     errors: Vec<Error>,
 }
 
-impl<E: Into<Error>, T: IntoIterator<Item = E>, P: AsRef<Path>> Into<DiagnosticTuple> for (P, T) {
-    fn into(self) -> DiagnosticTuple {
-        let mut builder = DiagnosticTupleBuilder::new(self.0);
-        builder.diagnoses(self.1);
+impl<E: Into<Error>, T: IntoIterator<Item = E>, P: AsRef<Path>> From<(P, T)> for DiagnosticTuple {
+    fn from(val: (P, T)) -> Self {
+        let mut builder = DiagnosticTupleBuilder::new(val.0);
+        builder.diagnoses(val.1);
         builder.build()
     }
 }
