@@ -126,7 +126,7 @@ impl<'src> Iterator for Tokenizer<'src> {
 }
 
 impl Token {
-    pub fn tokens<S: AsRef<str>>(source: &S) -> Vec<Result<Token, LexingError>> {
+    pub fn tokens<S: AsRef<str> + ?Sized>(source: &S) -> Vec<Result<Token, LexingError>> {
         Tokenizer::new(source.as_ref()).collect::<Vec<_>>()
     }
 }

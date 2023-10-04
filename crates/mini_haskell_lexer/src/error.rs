@@ -7,5 +7,5 @@ use thiserror::Error;
 pub enum LexingError {
     #[error("Unexpected token")]
     #[diagnostic()]
-    UnexpectedToken(#[label] Span),
+    UnexpectedToken(#[label = "Invalid token"] Span),
 }

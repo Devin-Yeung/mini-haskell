@@ -1,4 +1,5 @@
 use miette::{Error, GraphicalReportHandler, GraphicalTheme, NamedSource};
+use std::fmt::Write;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -89,6 +90,7 @@ impl Reporter {
                 self.handler
                     .render_report(&mut err, error.as_ref())
                     .unwrap();
+                err.write_str("\n").unwrap();
             }
         }
         err
