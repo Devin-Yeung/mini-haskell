@@ -1,0 +1,18 @@
+[package]
+name = "mini_haskell_cli"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "mhc"
+path = "src/main.rs"
+
+[dependencies]
+mini_haskell_lexer = { path = "../mini_haskell_lexer" }
+mini_haskell_parser = { path = "../mini_haskell_parser" }
+mini_haskell_diagnostic = { path = "../mini_haskell_diagnostic" }
+thiserror = { workspace = true }
+insta = { workspace = true }
+clap = { version = "4.4.6", features = ["derive"] }
