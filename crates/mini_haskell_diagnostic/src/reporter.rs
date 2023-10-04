@@ -8,6 +8,14 @@ pub struct DiagnosticTuple {
     errors: Vec<Error>,
 }
 
+impl<E: Into<Error>, T: IntoIterator<Item = E>, P: AsRef<Path>> Into<DiagnosticTuple> for (P, T) {
+    fn into(self) -> DiagnosticTuple {
+        let mut builder = DiagnosticTupleBuilder::new(self.0);
+        builder.diagnoses(self.1);
+        builder.build()
+    }
+}
+
 pub struct DiagnosticTupleBuilder {
     path: PathBuf,
     errors: Vec<Error>,
@@ -23,6 +31,11 @@ impl DiagnosticTupleBuilder {
 
     pub fn diagnose(&mut self, err: impl Into<Error>) -> &mut Self {
         self.errors.push(err.into());
+        self
+    }
+
+    pub fn diagnoses(&mut self, errs: impl IntoIterator<Item = impl Into<Error>>) -> &mut Self {
+        self.errors.extend(errs.into_iter().map(|err| err.into()));
         self
     }
 
@@ -84,13 +97,14 @@ impl Reporter {
 
 #[cfg(test)]
 mod test {
-    use crate::reporter::{DiagnosticTupleBuilder, Reporter};
+    use crate::reporter::{DiagnosticTuple, Reporter};
     use crate::span::Span;
     use miette::Diagnostic;
+    use std::path::Path;
     use testsuite::unittest;
     use thiserror::Error;
 
-    #[derive(Diagnostic, Error, Debug)]
+    #[derive(Diagnostic, Error, Debug, Clone)]
     pub enum Foo {
         #[error("This is an example error")]
         #[diagnostic(help("This is an example help msg"))]
@@ -100,9 +114,9 @@ mod test {
     unittest!(simple_err, |_| {
         let err = Foo::Bar(Span { start: 5, end: 5 });
 
-        let mut builder = DiagnosticTupleBuilder::new("snapshots/reporter/input/simple_err.hs");
-        builder.diagnose(err);
-        let diagnostic = builder.build();
+        let path = Path::new("snapshots/reporter/input/simple_err.hs");
+        let errors = vec![err.clone()];
+        let diagnostic: DiagnosticTuple = (path, errors).into();
 
         let mut reporter = Reporter::new();
         reporter.report(diagnostic);
