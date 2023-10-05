@@ -13,6 +13,10 @@ pub enum SyntaxError {
         expected: &'static str,
         found: &'static str,
     },
-    #[error("Expected {0}")]
-    Expected(&'static str),
+    #[error("SyntaxError: Unexpected AST")]
+    Expected {
+        #[label = "Expected {expected}"]
+        span: Span,
+        expected: &'static str,
+    },
 }

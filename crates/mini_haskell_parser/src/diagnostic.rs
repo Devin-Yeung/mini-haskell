@@ -12,4 +12,13 @@ mod test {
 
         insta::assert_snapshot!(result);
     });
+
+    unittest!(unexpected_expression, |path, _| {
+        let result = diagnostic(path, |src| {
+            let (_, errors) = Parser::parse(src);
+            errors
+        });
+
+        insta::assert_snapshot!(result);
+    });
 }

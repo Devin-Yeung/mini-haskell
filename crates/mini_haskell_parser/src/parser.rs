@@ -216,7 +216,10 @@ impl<'src> Parser<'src> {
                 self.advance()?.span,
             )),
             TokenTy::Identifier(_) => todo!(),
-            _ => Err(SyntaxError::Expected("expression")),
+            _ => Err(SyntaxError::Expected {
+                span: self.peek_span()?,
+                expected: "expression",
+            }),
         }
     }
 }

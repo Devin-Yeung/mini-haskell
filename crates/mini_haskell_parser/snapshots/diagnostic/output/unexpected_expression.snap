@@ -1,0 +1,12 @@
+---
+source: crates/mini_haskell_parser/src/diagnostic.rs
+expression: result
+---
+  × SyntaxError: Unexpected AST
+   ╭─[snapshots/diagnostic/input/unexpected_expression.hs:1:1]
+ 1 │ T ? :
+   ·     ┬
+   ·     ╰── Expected expression
+   ╰────
+
+
