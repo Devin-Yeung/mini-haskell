@@ -1,11 +1,15 @@
+use miette::Diagnostic;
+use mini_haskell_diagnostic::span::Span;
 use thiserror::Error;
 
-#[derive(Error, Debug, Eq, PartialEq, Copy, Clone)]
+#[derive(Diagnostic, Error, Debug, Eq, PartialEq, Copy, Clone)]
 pub enum SyntaxError {
     #[error("Unexpected EOF")]
     UnexpectedEOF,
-    #[error("Expected token {expected}, found {found}")]
+    #[error("SyntaxError: Unexpected token")]
     UnexpectedToken {
+        #[label = "Expected {expected}, found {found}"]
+        span: Span,
         expected: &'static str,
         found: &'static str,
     },

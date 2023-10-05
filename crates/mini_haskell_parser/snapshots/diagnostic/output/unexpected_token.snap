@@ -1,0 +1,12 @@
+---
+source: crates/mini_haskell_parser/src/diagnostic.rs
+expression: result
+---
+  × SyntaxError: Unexpected token
+   ╭─[snapshots/diagnostic/input/unexpected_token.hs:1:1]
+ 1 │ T ? 1 ?
+   ·       ┬
+   ·       ╰── Expected :, found ?
+   ╰────
+
+

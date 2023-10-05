@@ -15,10 +15,23 @@ impl<'src> Parser<'src> {
         }
     }
 
+    pub fn parse<S: AsRef<str> + ?Sized>(src: &'src S) -> (Option<Expr>, Vec<SyntaxError>) {
+        let mut parser = Parser::new(src);
+        let mut errors: Vec<SyntaxError> = Vec::new();
+        let mut expr: Option<Expr> = None;
+
+        match parser.conditional() {
+            Ok(e) => expr = Some(e),
+            Err(err) => errors.push(err),
+        }
+        (expr, errors)
+    }
+
     fn consume(&mut self, ty: TokenTy) -> Result<Token, SyntaxError> {
         match self.peek_type()? {
             found if found == ty => Ok(self.advance()?),
             found => Err(SyntaxError::UnexpectedToken {
+                span: self.peek_span()?,
                 expected: ty.name(),
                 found: found.name(),
             }),
@@ -38,6 +51,18 @@ impl<'src> Parser<'src> {
             match self.tokenizer.peek() {
                 None => return Ok(TokenTy::EOF),
                 Some(Ok(token)) => return Ok(token.ty.clone()),
+                Some(Err(_)) => {
+                    self.tokenizer.next();
+                }
+            }
+        }
+    }
+
+    fn peek_span(&mut self) -> Result<Span, SyntaxError> {
+        loop {
+            match self.tokenizer.peek() {
+                None => return Err(SyntaxError::UnexpectedEOF),
+                Some(Ok(token)) => return Ok(token.span),
                 Some(Err(_)) => {
                     self.tokenizer.next();
                 }
