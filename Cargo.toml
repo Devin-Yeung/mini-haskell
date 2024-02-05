@@ -11,5 +11,5 @@ mini_haskell_parser = { version = "0.1.0", path = "crates/mini_haskell_parser" }
 testsuite = { version = "0.1.0", path = "crates/testsuite" }
 testsuite_macros = { version = "0.1.0", path = "crates/testsuite_macros" }
 insta = { version = "1.33.0", features = ["glob"] }
-miette = { version = "5.10.0", features = ["fancy"] }
+miette = { version = "7.0.0", features = ["fancy"] }
 thiserror = "1.0.49"
