@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-logos = "0.13.0"
+logos = "0.14.0"
 insta = { workspace = true, features = ["glob"] }
 thiserror = { workspace = true }
 mini_haskell_diagnostic = { path = "../mini_haskell_diagnostic" }

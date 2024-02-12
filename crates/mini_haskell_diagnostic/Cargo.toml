@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 ariadne = "0.4.0"
-logos = "0.13.0"
+logos = "0.14.0"
 insta = { workspace = true, features = ["glob"] }
 miette = { workspace = true, features = ["fancy"] }
 testsuite = { path = "../testsuite" }
